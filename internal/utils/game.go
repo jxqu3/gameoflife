@@ -18,7 +18,7 @@ func (g *Game) GetNeighbor(c *Cell, x int, y int) *Cell {
 		return c
 	}
 
-	return g.Grid[cX+x][cY+y]
+	return g.GetCell(cX+x, cY+y)
 }
 
 func (g *Game) Exists(x, y int) bool {

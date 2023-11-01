@@ -3,7 +3,8 @@ This a small template to start a celular automata using Raylib with Go.
 It includes functions such as `GetNeighbor` and `GetCell`, a `Vec2` struct for positions, and a `Game` struct where you can access the grid of cells easily
 
 ## grid
-The grid is a 2D array of pointers to the `Cell` struct. The cell struct has 2 values: `Alive`: wether the cell is or not alive, and `Position` a Vec2 that stores the cell position.
+The grid is a 2D array of pointers to the `Cell` struct.  
+The cell struct has 2 values: `Color`: the color of the cell, `Alive`: wether the cell is or not alive, and `Position` a Vec2 that stores the cell position.
 
 ## game
 The `Game` struct has:
@@ -11,7 +12,7 @@ The `Game` struct has:
 - Height: The window height
 - CellSize: The size of each cell: if Width and Height is 800 and CellSize is 10, there will be 80 cells.
 - Grid: The grid of cells.
-It also has the `GetNeighbor` and `GetCell` functions to easily make your rules for the automata.
+It also has the `GetNeighbor`, `GetNumberAliveNeighbors`, `Exists` and `GetCell` functions to easily make your rules for the automata.
 
 ## consts
 The `main.go` file has these consts:

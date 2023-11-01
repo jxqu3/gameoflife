@@ -30,3 +30,9 @@ Click "Use this template"
 Clone the new repository.
 Edit the init cells in `main.go`. By default even cells are alive.
 Edit `update.go` this is the stuff that will happen to the cells each iteration
+
+## screenshots
+![image](https://github.com/checkm4ted/automata/assets/146487129/dd7ac5d8-2a32-4773-bb16-60dfcda18d54)
+![image](https://github.com/checkm4ted/automata/assets/146487129/ef281040-a4c2-4d1c-83b1-ab8f5265988a)
+![image](https://github.com/checkm4ted/automata/assets/146487129/bdeeb6ed-cb28-4dbb-9b5c-5dd42f8a0386)
+![image](https://github.com/checkm4ted/automata/assets/146487129/20a7a5f4-bda5-4e72-b15d-f3d69f9aaea0)

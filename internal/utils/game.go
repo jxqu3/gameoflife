@@ -20,3 +20,7 @@ func (g *Game) GetNeighbor(c Cell, x int, y int) *Cell {
 
 	return g.Grid[cX+x][cY+y]
 }
+
+func (g *Game) GetCell(x, y int) *Cell {
+	return g.Grid[x][y]
+}

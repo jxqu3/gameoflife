@@ -12,7 +12,3 @@ type Cell struct {
 func NewVec2(x, y int) Vec2 {
 	return Vec2{x, y}
 }
-
-func GetCell(g Game, x, y int) *Cell {
-	return g.Grid[x][y]
-}

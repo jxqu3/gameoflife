@@ -4,32 +4,27 @@ type Game struct {
 	Width    int
 	Height   int
 	CellSize int
-	Grid     [][]*Cell
+	Grid     Grid
+	NextGrid Grid
+}
+
+type Grid struct {
+	Width  int
+	Height int
+	Cells  [][]*Cell
 }
 
 func (g *Game) GetNeighbor(c *Cell, x int, y int) *Cell {
 	cX := c.Position.X
 	cY := c.Position.Y
 
-	if cX+x < 0 || cX+x >= g.Width {
-		return c
-	}
-	if cY+y < 0 || cY+y >= g.Height {
-		return c
-	}
-
 	return g.GetCell(cX+x, cY+y)
 }
 
-func (g *Game) Exists(x, y int) bool {
-	return x >= 0 && x < len(g.Grid) && y >= 0 && y < len(g.Grid[x])
-}
-
 func (g *Game) GetCell(x, y int) *Cell {
-	if g.Exists(x, y) {
-		return g.Grid[x][y]
-	}
-	return g.GetCell(0, 0)
+	y = (g.Grid.Height + y) % g.Grid.Height
+	x = (g.Grid.Width + x) % g.Grid.Width
+	return g.Grid.Cells[x][y]
 }
 
 func (g *Game) GetNumberAliveNeighbors(c *Cell) int {
@@ -38,15 +33,22 @@ func (g *Game) GetNumberAliveNeighbors(c *Cell) int {
 	y := c.Position.Y
 	x := c.Position.X
 
-	for i := y - 1; i <= y+1; i++ {
-		for j := x - 1; j <= x+1; j++ {
-			if i == y && j == x {
-				continue
-			}
-			if g.GetCell(j, i).Alive {
+	for i := -1; i <= 1; i++ {
+		for j := -1; j <= 1; j++ {
+			if (j != 0 || i != 0) && g.GetCell(x+i, y+j).Alive {
 				neighbors++
 			}
 		}
 	}
 	return neighbors
+}
+
+func (g *Game) Next(x, y int) bool {
+	c := g.GetCell(x, y)
+	n := g.GetNumberAliveNeighbors(c)
+
+	if n == 3 || (n == 2 && c.Alive) {
+		return true
+	}
+	return false
 }

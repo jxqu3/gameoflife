@@ -4,36 +4,82 @@ import (
 
 	// Lib to replace err != nil
 
-	"github.com/checkm4ted/va/internal/utils"
+	"fmt"
+	"image/color"
+	"time"
+
+	"github.com/checkm4ted/no/internal/utils"
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
 const Width = 800
 const Height = 800
-const CellSize = 10
+const CellSize = 5
 
 // Iterations Per Second
-const Speed_IPSecond = 10
+var Speed_IPSecond = 1
+
+var Paused = true
 
 func main() {
 
 	grid := utils.InitGrid(Width, Height, CellSize)
 
 	game := utils.Game{
-		Width:    Width / CellSize,
-		Height:   Height / CellSize,
+		Width:    Width,
+		Height:   Height,
 		CellSize: CellSize,
-		Grid:     grid,
+		Grid: utils.Grid{
+			Width:  Width / CellSize,
+			Height: Height / CellSize,
+			Cells:  grid,
+		},
+		NextGrid: utils.Grid{
+			Width:  Width / CellSize,
+			Height: Height / CellSize,
+			Cells:  grid,
+		},
 	}
 	rl.InitWindow(Width, Height, "CheckM4te Automata")
 	defer rl.CloseWindow()
-	rl.SetTargetFPS(Speed_IPSecond)
+	rl.SetTargetFPS(60)
+
+	go func() {
+		for {
+			if !Paused {
+				game.Update()
+				time.Sleep(time.Duration(1000/Speed_IPSecond) * time.Millisecond)
+			}
+		}
+	}()
 
 	for !rl.WindowShouldClose() {
+		if rl.IsKeyPressed(rl.KeySpace) {
+			Paused = !Paused
+		}
 		rl.BeginDrawing()
 
 		game.Draw()
 
+		rl.DrawText(fmt.Sprint(Speed_IPSecond), 10, 10, 20, color.RGBA{255, 255, 255, 255})
+
+		if Paused {
+			rl.DrawText("PAUSED", 600, 10, 20, color.RGBA{255, 255, 255, 255})
+		}
+
+		mW := rl.GetMouseWheelMove()
+
+		if rl.IsKeyDown(rl.KeyLeftControl) {
+			game.CellSize += int(mW)
+		} else {
+			if Speed_IPSecond+int(mW) >= 1 {
+				Speed_IPSecond += int(mW)
+			} else {
+				Speed_IPSecond = 1
+			}
+		}
+
 		rl.EndDrawing()
 	}
+
 }

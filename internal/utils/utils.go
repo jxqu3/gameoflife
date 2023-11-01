@@ -2,7 +2,6 @@ package utils
 
 import (
 	"image/color"
-	"math"
 )
 
 type Vec2 struct {
@@ -10,9 +9,10 @@ type Vec2 struct {
 }
 
 type Cell struct {
-	Alive    bool
-	Position Vec2
-	Color    color.RGBA
+	Alive       bool
+	Position    Vec2
+	Color       color.RGBA
+	JustChanged bool
 }
 
 func NewVec2(x, y int) Vec2 {
@@ -22,11 +22,11 @@ func NewVec2(x, y int) Vec2 {
 func InitGrid(Width int, Height int, CellSize int) [][]*Cell {
 	grid := make([][]*Cell, Width/CellSize)
 
-	for x := 0; x < Width/CellSize; x++ {
+	for x := range grid {
 		grid[x] = make([]*Cell, Height/CellSize)
-		for y := 0; y < Width/CellSize; y++ {
+		for y := range grid[x] {
 			grid[x][y] = &Cell{
-				Alive:    math.Mod(float64(x), 2) == 0,
+				Alive:    false,
 				Position: NewVec2(x, y),
 			}
 		}

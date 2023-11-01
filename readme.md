@@ -1,5 +1,5 @@
 # automata
-This a small template to start a celular automata using Raylib with Go.
+This a small template to start a cellular automata using Raylib with Go.
 It includes functions such as `GetNeighbor` and `GetCell`, a `Vec2` struct for positions, and a `Game` struct where you can access the grid of cells easily
 
 ## grid

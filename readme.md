@@ -12,4 +12,4 @@ RIP John Horton Conway
 
 ## screenshots
 ![image](example.gif)
-![image](image.png)
+![image](https://github.com/checkm4ted/gameoflife/assets/146487129/aa3a6865-2cb1-437d-9e75-6e90d7ba00da)

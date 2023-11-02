@@ -26,9 +26,10 @@ func main() {
 	grid := utils.InitGrid(Width, Height, CellSize)
 
 	game := utils.Game{
-		Width:    Width,
-		Height:   Height,
-		CellSize: CellSize,
+		Width:        Width,
+		Height:       Height,
+		CellSize:     CellSize,
+		InitCellSize: CellSize,
 		Grid: utils.Grid{
 			Width:  Width / CellSize,
 			Height: Height / CellSize,
@@ -42,7 +43,7 @@ func main() {
 	}
 	rl.InitWindow(Width, Height, "CheckM4te Automata")
 	defer rl.CloseWindow()
-	rl.SetTargetFPS(60)
+	rl.SetTargetFPS(144)
 
 	go func() {
 		for {

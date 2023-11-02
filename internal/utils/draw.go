@@ -9,7 +9,11 @@ import (
 func (g *Game) Draw() {
 	cs := g.CellSize
 
-	rl.ClearBackground(color.RGBA{20, 20, 20, 255})
+	if g.CellSize >= g.InitCellSize {
+		rl.ClearBackground(color.RGBA{20, 20, 20, 255})
+	} else {
+		rl.ClearBackground(color.RGBA{0, 0, 0, 255})
+	}
 
 	for x := range g.Grid.Cells {
 		for y := range g.Grid.Cells[x] {
@@ -34,8 +38,11 @@ func (g *Game) Draw() {
 				}
 				c.Color = color.RGBA{255, 255, 255, 255}
 			}
-			rl.DrawRectangle(int32(x*cs+1), int32(y*cs+1), int32(cs-2), int32(cs-2), c.Color)
-
+			if g.CellSize >= g.InitCellSize {
+				rl.DrawRectangle(int32(x*cs+1), int32(y*cs+1), int32(cs-2), int32(cs-2), c.Color)
+				continue
+			}
+			rl.DrawRectangle(int32(x*cs), int32(y*cs), int32(cs), int32(cs), c.Color)
 		}
 	}
 }

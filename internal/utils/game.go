@@ -1,11 +1,12 @@
 package utils
 
 type Game struct {
-	Width    int
-	Height   int
-	CellSize int
-	Grid     Grid
-	NextGrid Grid
+	Width        int
+	Height       int
+	CellSize     int
+	InitCellSize int
+	Grid         Grid
+	NextGrid     Grid
 }
 
 type Grid struct {

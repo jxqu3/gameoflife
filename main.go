@@ -17,7 +17,7 @@ const Height = 800
 const CellSize = 5
 
 // Iterations Per Second
-var Speed_IPSecond = 1
+var Speed_IPSecond = 5
 
 var Paused = true
 
@@ -41,7 +41,7 @@ func main() {
 			Cells:  grid,
 		},
 	}
-	rl.InitWindow(Width, Height, "CheckM4te Automata")
+	rl.InitWindow(Width, Height, "CheckM4te Game Of Life")
 	defer rl.CloseWindow()
 	rl.SetTargetFPS(144)
 
@@ -62,10 +62,10 @@ func main() {
 
 		game.Draw()
 
-		rl.DrawText(fmt.Sprint(Speed_IPSecond), 10, 10, 20, color.RGBA{255, 255, 255, 255})
+		rl.DrawText(fmt.Sprint("Iterations/Sec: ", Speed_IPSecond), 10, 10, 20, color.RGBA{255, 255, 255, 255})
 
 		if Paused {
-			rl.DrawText("PAUSED", 600, 10, 20, color.RGBA{255, 255, 255, 255})
+			rl.DrawText("PAUSED (Space)", 600, 10, 20, color.RGBA{255, 255, 255, 255})
 		}
 
 		mW := rl.GetMouseWheelMove()

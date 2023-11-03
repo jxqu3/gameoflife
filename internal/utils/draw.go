@@ -38,7 +38,7 @@ func (g *Game) Draw() {
 				}
 				c.Color = color.RGBA{255, 255, 255, 255}
 			}
-			if g.CellSize >= g.InitCellSize && c.Alive {
+			if g.CellSize >= g.InitCellSize {
 				rl.DrawRectangle(int32(x*cs+1), int32(y*cs+1), int32(cs-2), int32(cs-2), c.Color)
 				continue
 			}

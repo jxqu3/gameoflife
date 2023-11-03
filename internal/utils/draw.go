@@ -38,11 +38,13 @@ func (g *Game) Draw() {
 				}
 				c.Color = color.RGBA{255, 255, 255, 255}
 			}
-			if g.CellSize >= g.InitCellSize {
+			if g.CellSize >= g.InitCellSize && c.Alive {
 				rl.DrawRectangle(int32(x*cs+1), int32(y*cs+1), int32(cs-2), int32(cs-2), c.Color)
 				continue
 			}
-			rl.DrawRectangle(int32(x*cs), int32(y*cs), int32(cs), int32(cs), c.Color)
+			if c.Alive {
+				rl.DrawRectangle(int32(x*cs), int32(y*cs), int32(cs), int32(cs), c.Color)
+			}
 		}
 	}
 }

@@ -23,18 +23,14 @@ func (g *Game) Draw() {
 			if c.Alive {
 				c.Color = color.RGBA{uint8(float64(g.GetNumberAliveNeighbors(c)) / 4 * 255), 127, 0, 255}
 			}
-			if rl.GetMouseX() >= int32(x*cs) && rl.GetMouseX() <= int32(x*cs+cs-1) && rl.GetMouseY() >= int32(y*cs) && rl.GetMouseY() <= int32(y*cs+cs-1) {
+			if rl.GetMouseX() >= int32(x*cs-g.BrushSize/2) &&
+				rl.GetMouseX() <= int32(x*cs+cs+g.BrushSize/2) &&
+				rl.GetMouseY() >= int32(y*cs-g.BrushSize/2) &&
+				rl.GetMouseY() <= int32(y*cs+cs-1+g.BrushSize/2) {
 				if rl.IsMouseButtonDown(rl.MouseLeftButton) {
-					if !c.JustChanged {
-						c.Alive = !g.GetCell(x, y).Alive
-						c.JustChanged = true
-						c.Color = color.RGBA{0, 0, 0, 255}
-						if c.Alive {
-							c.Color = color.RGBA{uint8(float64(g.GetNumberAliveNeighbors(c)) / 4 * 255), 127, 0, 255}
-						}
-					}
-				} else {
-					c.JustChanged = false
+					c.Alive = true
+				} else if rl.IsMouseButtonDown(rl.MouseRightButton) {
+					c.Alive = false
 				}
 				c.Color = color.RGBA{255, 255, 255, 255}
 			}

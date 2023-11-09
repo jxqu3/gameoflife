@@ -17,7 +17,7 @@ const Height = 800
 const CellSize = 5
 
 // Iterations Per Second
-var Speed_IPSecond = 5
+var Speed_IPSecond = 10
 
 var Paused = true
 
@@ -72,6 +72,8 @@ func main() {
 
 		if rl.IsKeyDown(rl.KeyLeftControl) {
 			game.CellSize += int(mW)
+		} else if rl.IsKeyDown(rl.KeyLeftShift) {
+			game.BrushSize += int(mW)
 		} else {
 			if Speed_IPSecond+int(mW) >= 1 {
 				Speed_IPSecond += int(mW)

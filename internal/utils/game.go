@@ -7,6 +7,7 @@ type Game struct {
 	InitCellSize int
 	Grid         Grid
 	NextGrid     Grid
+	BrushSize    int
 }
 
 type Grid struct {

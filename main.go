@@ -54,7 +54,14 @@ func main() {
 
 		rl.EndMode2D()
 
-		rl.DrawText(fmt.Sprint("Iterations/Sec: ", game.Speed_IPSecond, "\nFPS: ", rl.GetFPS(), "\nZoom: ", fmt.Sprintf("%.2f", game.Camera.Zoom)), 10, 10, 20, color.RGBA{255, 255, 255, 255})
+		rl.DrawText(
+			fmt.Sprint(
+				"Iterations/Sec: ", game.Speed_IPSecond, "\nFPS: ",
+				rl.GetFPS(), "\nZoom: ",
+				fmt.Sprintf("%.2f", game.Camera.Zoom),
+			),
+			10, 10, 20, color.RGBA{255, 255, 255, 255},
+		)
 
 		if game.Paused {
 			rl.DrawText("PAUSED (Space)", 600, 10, 20, color.RGBA{255, 255, 255, 255})

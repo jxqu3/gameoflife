@@ -2,6 +2,7 @@ package utils
 
 import (
 	"image/color"
+	"math/rand"
 
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
@@ -17,6 +18,18 @@ func (g *Game) Update() {
 func (game *Game) HandleInput() {
 	if rl.IsKeyPressed(rl.KeySpace) {
 		game.Paused = !game.Paused
+	}
+
+	if rl.IsKeyPressed(rl.KeyC) {
+		for i := range game.Grid.Cells {
+			game.Grid.Cells[i].Alive = false
+		}
+	}
+
+	if rl.IsKeyPressed(rl.KeyR) {
+		for i := range game.Grid.Cells {
+			game.Grid.Cells[i].Alive = rand.Intn(3) == 1
+		}
 	}
 
 	if rl.IsKeyPressed(rl.KeyG) {

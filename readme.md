@@ -12,6 +12,8 @@ RIP John Horton Conway
 - Place cells with left click
 - Remove cells with right click
 - Toggle grid outline with G
+- Randomize grid with R
+- Clear grid with C
 
 ## features
 - Zoom in/out

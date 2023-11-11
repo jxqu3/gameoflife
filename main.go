@@ -14,72 +14,51 @@ import (
 
 const Width = 800
 const Height = 800
-const CellSize = 5
-
-// Iterations Per Second
-var Speed_IPSecond = 10
-
-var Paused = true
 
 func main() {
-
-	grid := utils.InitGrid(Width, Height, CellSize)
-
 	game := utils.Game{
-		Width:        Width,
-		Height:       Height,
-		CellSize:     CellSize,
-		InitCellSize: CellSize,
-		Grid: utils.Grid{
-			Width:  Width / CellSize,
-			Height: Height / CellSize,
-			Cells:  grid,
+		Width:     Width,
+		Height:    Height,
+		Grid:      utils.InitGrid(Width/3, Height/3),
+		BrushSize: 1,
+		Camera: rl.Camera2D{
+			Offset:   rl.Vector2{X: 0, Y: 0},
+			Target:   rl.Vector2{X: 0, Y: 0},
+			Rotation: 0,
+			Zoom:     0.3,
 		},
-		NextGrid: utils.Grid{
-			Width:  Width / CellSize,
-			Height: Height / CellSize,
-			Cells:  grid,
-		},
+		ShowGrid:       true,
+		Paused:         true,
+		Speed_IPSecond: 1,
 	}
 	rl.InitWindow(Width, Height, "CheckM4te Game Of Life")
 	defer rl.CloseWindow()
-	rl.SetTargetFPS(144)
+	rl.SetTargetFPS(300)
 
 	go func() {
 		for {
-			if !Paused {
+			if !game.Paused {
 				game.Update()
-				time.Sleep(time.Duration(1000/Speed_IPSecond) * time.Millisecond)
+				time.Sleep(time.Duration(1000/game.Speed_IPSecond) * time.Millisecond)
 			}
 		}
 	}()
 
 	for !rl.WindowShouldClose() {
-		if rl.IsKeyPressed(rl.KeySpace) {
-			Paused = !Paused
-		}
+
+		game.HandleInput()
+
 		rl.BeginDrawing()
+		rl.BeginMode2D(game.Camera)
 
 		game.Draw()
 
-		rl.DrawText(fmt.Sprint("Iterations/Sec: ", Speed_IPSecond), 10, 10, 20, color.RGBA{255, 255, 255, 255})
+		rl.EndMode2D()
 
-		if Paused {
+		rl.DrawText(fmt.Sprint("Iterations/Sec: ", game.Speed_IPSecond, "\nFPS: ", rl.GetFPS(), "\nZoom: ", fmt.Sprintf("%.2f", game.Camera.Zoom)), 10, 10, 20, color.RGBA{255, 255, 255, 255})
+
+		if game.Paused {
 			rl.DrawText("PAUSED (Space)", 600, 10, 20, color.RGBA{255, 255, 255, 255})
-		}
-
-		mW := rl.GetMouseWheelMove()
-
-		if rl.IsKeyDown(rl.KeyLeftControl) {
-			game.CellSize += int(mW)
-		} else if rl.IsKeyDown(rl.KeyLeftShift) {
-			game.BrushSize += int(mW)
-		} else {
-			if Speed_IPSecond+int(mW) >= 1 {
-				Speed_IPSecond += int(mW)
-			} else {
-				Speed_IPSecond = 1
-			}
 		}
 
 		rl.EndDrawing()

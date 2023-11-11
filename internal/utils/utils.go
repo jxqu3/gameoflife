@@ -19,18 +19,31 @@ func NewVec2(x, y int) Vec2 {
 	return Vec2{x, y}
 }
 
-func InitGrid(Width int, Height int, CellSize int) [][]*Cell {
-	grid := make([][]*Cell, Width/CellSize)
-
-	for x := range grid {
-		grid[x] = make([]*Cell, Height/CellSize)
-		for y := range grid[x] {
-			grid[x][y] = &Cell{
-				Alive:    false,
-				Position: NewVec2(x, y),
-			}
+func InitGrid(Width int, Height int) Grid {
+	cells := make([]*Cell, Width*Height)
+	for i := range cells {
+		x := (i % Width)
+		y := (i / Height)
+		cells[i] = &Cell{
+			Alive:    false,
+			Position: NewVec2(x, y),
 		}
 	}
 
-	return grid
+	return Grid{
+		Width:  Width,
+		Height: Height,
+		Cells:  cells,
+	}
+}
+
+type Number interface {
+	int | int8 | int16 | int32 | int64 | uint | uint8 | uint16 | uint32 | uint64 | float32 | float64
+}
+
+func ClampMin[T Number](x, min T) T {
+	if x < min {
+		return min
+	}
+	return x
 }

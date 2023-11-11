@@ -1,35 +1,40 @@
 package utils
 
+import (
+	rl "github.com/gen2brain/raylib-go/raylib"
+)
+
 type Game struct {
-	Width        int
-	Height       int
-	CellSize     int
-	InitCellSize int
-	Grid         Grid
-	NextGrid     Grid
-	BrushSize    int
+	Width          int
+	Height         int
+	Grid           Grid
+	BrushSize      int
+	Camera         rl.Camera2D
+	ShowGrid       bool
+	Speed_IPSecond int
+	Paused         bool
 }
 
 type Grid struct {
 	Width  int
 	Height int
-	Cells  [][]*Cell
+	Cells  []*Cell
 }
 
 func (g *Game) GetNeighbor(c *Cell, x int, y int) *Cell {
 	cX := c.Position.X
 	cY := c.Position.Y
 
-	return g.GetCell(cX+x, cY+y)
+	return g.Grid.GetCell(cX+x, cY+y)
 }
 
-func (g *Game) GetCell(x, y int) *Cell {
-	y = (g.Grid.Height + y) % g.Grid.Height
-	x = (g.Grid.Width + x) % g.Grid.Width
-	return g.Grid.Cells[x][y]
+func (g *Grid) GetCell(x, y int) *Cell {
+	x = (g.Width + x) % g.Width
+	y = (g.Height + y) % g.Height
+	return g.Cells[x+y*g.Width]
 }
 
-func (g *Game) GetNumberAliveNeighbors(c *Cell) int {
+func (g *Game) GetNumberAliveNeighbors(c Cell) int {
 	var neighbors int
 
 	y := c.Position.Y
@@ -37,7 +42,7 @@ func (g *Game) GetNumberAliveNeighbors(c *Cell) int {
 
 	for i := -1; i <= 1; i++ {
 		for j := -1; j <= 1; j++ {
-			if (j != 0 || i != 0) && g.GetCell(x+i, y+j).Alive {
+			if (j != 0 || i != 0) && g.Grid.GetCell(x+i, y+j).Alive {
 				neighbors++
 			}
 		}
@@ -45,8 +50,7 @@ func (g *Game) GetNumberAliveNeighbors(c *Cell) int {
 	return neighbors
 }
 
-func (g *Game) Next(x, y int) bool {
-	c := g.GetCell(x, y)
+func (g *Game) Next(c Cell) bool {
 	n := g.GetNumberAliveNeighbors(c)
 
 	if n == 3 || (n == 2 && c.Alive) {

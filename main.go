@@ -45,8 +45,7 @@ func main() {
 	}()
 
 	for !rl.WindowShouldClose() {
-
-		game.HandleInput()
+		go game.HandleInput()
 
 		rl.BeginDrawing()
 		rl.BeginMode2D(game.Camera)

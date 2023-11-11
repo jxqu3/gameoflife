@@ -1,9 +1,6 @@
 package main
 
 import (
-
-	// Lib to replace err != nil
-
 	"fmt"
 	"image/color"
 	"time"
@@ -31,6 +28,7 @@ func main() {
 		Paused:         true,
 		Speed_IPSecond: 1,
 	}
+
 	rl.InitWindow(Width, Height, "CheckM4te Game Of Life")
 	defer rl.CloseWindow()
 	rl.SetTargetFPS(300)

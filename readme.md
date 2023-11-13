@@ -4,6 +4,12 @@ Includes a editor, a GUI to set things like grid size, play pause, simulation sp
 
 RIP John Horton Conway 
 
+## install
+Download the binary for your OS in releases OR do
+```
+go install github.com/checkm4ted/gameoflife
+```
+
 ## controls
 - Zoom with CTRL+MouseWheel
 - Set brush width with Shift+MouseWheel

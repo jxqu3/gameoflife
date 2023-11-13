@@ -5,7 +5,7 @@ import (
 	"image/color"
 	"time"
 
-	"github.com/checkm4ted/no/internal/utils"
+	"github.com/checkm4ted/gameoflife/internal/utils"
 	rg "github.com/gen2brain/raylib-go/raygui"
 	rl "github.com/gen2brain/raylib-go/raylib"
 )

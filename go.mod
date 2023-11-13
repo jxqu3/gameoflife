@@ -1,4 +1,4 @@
-module github.com/checkm4ted/no
+module github.com/checkm4ted/gameoflife
 
 go 1.21.3
 

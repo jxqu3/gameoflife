@@ -8,7 +8,7 @@ import (
 )
 
 func (g *Game) Update() {
-	nextGrid := InitGrid(g.Width/3, g.Height/3)
+	nextGrid := InitGrid(g.Grid.Width, g.Grid.Height)
 	for _, c := range g.Grid.Cells {
 		nextGrid.GetCell(c.Position.X, c.Position.Y).Alive = g.Next(*c)
 	}
@@ -77,12 +77,13 @@ func (g *Game) Draw() {
 		xS := x * cs
 		yS := y * cs
 
-		brushSize := g.BrushSize / 2.0 * cs
+		brushSize := int(g.BrushSize / 2.0 * cs)
 
-		highlighted := m.X >= float32(xS-brushSize) &&
-			m.X <= float32(xS+cs+brushSize-1) &&
-			m.Y >= float32(yS-brushSize) &&
-			m.Y <= float32(yS+cs+brushSize-1)
+		highlighted :=
+			int(m.X) >= xS-brushSize+1 &&
+				int(m.X) <= xS+cs+brushSize &&
+				int(m.Y) >= yS-brushSize+1 &&
+				int(m.Y) <= yS+cs+brushSize
 
 		if highlighted {
 			c.Color = color.RGBA{255, 255, 255, 255}

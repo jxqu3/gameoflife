@@ -1,6 +1,6 @@
 # checkm4te conway's game of life
 A game of life implementation written in Go with Raylib. I used the [automata template](https://github.com/checkm4ted/automata) I made to make this.
-Includes a editor, play pause, simulation speed, zoom, and more.
+Includes a editor, a GUI to set things like grid size, play pause, simulation speed, zoom, and more.
 
 RIP John Horton Conway 
 

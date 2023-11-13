@@ -54,9 +54,10 @@ func main() {
 
 		rl.DrawText(
 			fmt.Sprint(
-				"Iterations/Sec: ", game.Speed_IPSecond, "\nFPS: ",
-				rl.GetFPS(), "\nZoom: ",
-				fmt.Sprintf("%.2f", game.Camera.Zoom),
+				"Iterations/Sec: ", game.Speed_IPSecond,
+				"\nFPS: ", rl.GetFPS(),
+				"\nZoom: ", fmt.Sprintf("%.1f", game.Camera.Zoom),
+				"\nBrush Size: ", game.BrushSize,
 			),
 			10, 10, 20, color.RGBA{255, 255, 255, 255},
 		)

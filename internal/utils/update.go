@@ -47,7 +47,7 @@ func (game *Game) HandleInput() {
 		game.Camera.Zoom = ClampMin(game.Camera.Zoom, 0.2)
 
 	} else if rl.IsKeyDown(rl.KeyLeftShift) {
-		game.BrushSize += int(mW * 2)
+		game.BrushSize += int(mW)
 		game.BrushSize = ClampMin(game.BrushSize, 1)
 	} else {
 		if game.Speed_IPSecond+int(mW) >= 1 {
@@ -68,28 +68,35 @@ func (g *Game) Draw() {
 	for _, c := range g.Grid.Cells {
 		c.Color = color.RGBA{0, 0, 0, 255}
 		if c.Alive {
-			c.Color = color.RGBA{uint8(float64(g.GetNumberAliveNeighbors(*c)) / 4 * 255), 127, 0, 255}
+			c.Color = color.RGBA{uint8(float64(g.GetNumberAliveNeighbors(*c)) / 8.0 * 255), 127, 0, 255}
 		}
 
 		x := c.Position.X
 		y := c.Position.Y
 
-		if m.X >= float32(x*cs-g.BrushSize/2) &&
-			m.X <= float32(x*cs+cs+g.BrushSize/2) &&
-			m.Y >= float32(y*cs-g.BrushSize/2) &&
-			m.Y <= float32(y*cs+cs-1+g.BrushSize/2) {
+		xS := x * cs
+		yS := y * cs
+
+		brushSize := g.BrushSize / 2.0 * cs
+
+		highlighted := m.X >= float32(xS-brushSize) &&
+			m.X <= float32(xS+cs+brushSize-1) &&
+			m.Y >= float32(yS-brushSize) &&
+			m.Y <= float32(yS+cs+brushSize-1)
+
+		if highlighted {
+			c.Color = color.RGBA{255, 255, 255, 255}
 			if rl.IsMouseButtonDown(rl.MouseLeftButton) {
 				c.Alive = true
 			} else if rl.IsMouseButtonDown(rl.MouseRightButton) {
 				c.Alive = false
 			}
-			c.Color = color.RGBA{255, 255, 255, 255}
 		}
 
 		if g.ShowGrid {
 			rl.DrawRectangle(
-				int32(x*cs),
-				int32(y*cs),
+				int32(xS),
+				int32(yS),
 				int32(cs-1),
 				int32(cs-1),
 				c.Color,
@@ -97,12 +104,15 @@ func (g *Game) Draw() {
 			continue
 		}
 
-		rl.DrawRectangle(
-			int32(x*cs),
-			int32(y*cs),
-			int32(cs),
-			int32(cs),
-			c.Color,
-		)
+		// If there's no grid, only render the alive cells (much better performance)
+		if c.Alive || highlighted {
+			rl.DrawRectangle(
+				int32(xS),
+				int32(yS),
+				int32(cs),
+				int32(cs),
+				c.Color,
+			)
+		}
 	}
 }

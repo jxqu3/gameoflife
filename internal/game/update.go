@@ -1,4 +1,4 @@
-package utils
+package game
 
 import (
 	"image/color"
@@ -66,9 +66,9 @@ func (g *Game) Draw() {
 	m := rl.GetScreenToWorld2D(rl.GetMousePosition(), g.Camera)
 
 	for _, c := range g.Grid.Cells {
-		c.Color = color.RGBA{0, 0, 0, 255}
+		cColor := color.RGBA{0, 0, 0, 255}
 		if c.Alive {
-			c.Color = color.RGBA{uint8(float64(g.GetNumberAliveNeighbors(*c)) / 8.0 * 255), 127, 0, 255}
+			cColor = color.RGBA{uint8(float64(g.GetNumberAliveNeighbors(*c)) / 8.0 * 255), 127, 0, 255}
 		}
 
 		x := c.Position.X
@@ -86,7 +86,7 @@ func (g *Game) Draw() {
 				int(m.Y) <= yS+cs+brushSize
 
 		if highlighted {
-			c.Color = color.RGBA{255, 255, 255, 255}
+			cColor = color.RGBA{255, 255, 255, 255}
 			if rl.IsMouseButtonDown(rl.MouseLeftButton) {
 				c.Alive = true
 			} else if rl.IsMouseButtonDown(rl.MouseRightButton) {
@@ -100,7 +100,7 @@ func (g *Game) Draw() {
 				int32(yS),
 				int32(cs-1),
 				int32(cs-1),
-				c.Color,
+				cColor,
 			)
 			continue
 		}
@@ -112,7 +112,7 @@ func (g *Game) Draw() {
 				int32(yS),
 				int32(cs),
 				int32(cs),
-				c.Color,
+				cColor,
 			)
 		}
 	}

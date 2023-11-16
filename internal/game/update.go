@@ -8,7 +8,7 @@ import (
 )
 
 func (g *Game) Update() {
-	nextGrid := InitGrid(g.Grid.Width, g.Grid.Height)
+	nextGrid := InitGrid(g.Grid.Width)
 	for _, c := range g.Grid.Cells {
 		nextGrid.GetCell(c.Position.X, c.Position.Y).Alive = g.Next(*c)
 	}

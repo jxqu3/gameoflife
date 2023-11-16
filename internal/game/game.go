@@ -85,7 +85,9 @@ func (game *Game) DrawGUI() {
 	)
 
 	if int(gW) != game.Grid.Width {
+		game.Paused = true
 		game.Grid.Width = int(gW)
-		game.Grid = InitGrid(int(gW), int(gW))
+		game.Grid.Cells = InitGrid(game.Grid.Width).Cells
+		game.Update()
 	}
 }

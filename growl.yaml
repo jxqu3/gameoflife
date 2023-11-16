@@ -1,0 +1,4 @@
+commands:
+- name: bd
+  description: builds the the game
+  command: growl cross -l -s -ld -H=windowsgui

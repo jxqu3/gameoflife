@@ -16,7 +16,7 @@ func main() {
 	game := g.Game{
 		Width:     Width,
 		Height:    Height,
-		Grid:      g.InitGrid(80, 80),
+		Grid:      g.InitGrid(100),
 		BrushSize: 1,
 		Camera: rl.Camera2D{
 			Offset:   rl.Vector2{X: 350, Y: 0},

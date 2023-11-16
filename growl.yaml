@@ -1,7 +1,10 @@
 commands:
-- name: b
-  description: builds the the game
+- name: bw
+  description: builds the the game for windows
   command: growl cross -l -s -nc
+- name: bl
+  description: builds the the game for linux
+  command: growl cross -l
 - name: git
   description: adds to git
   command: git add -A

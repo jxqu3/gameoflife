@@ -1,4 +1,7 @@
 commands:
-- name: bd
+- name: b
   description: builds the the game
-  command: growl cross -l -s -ld -H=windowsgui
+  command: growl cross -l -s -nc
+- name: git
+  description: adds to git
+  command: git add -A

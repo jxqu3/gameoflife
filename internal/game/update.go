@@ -65,19 +65,26 @@ func (g *Game) Draw() {
 
 	m := rl.GetScreenToWorld2D(rl.GetMousePosition(), g.Camera)
 
+	var cColor color.RGBA
+	var x int
+	var y int
+	var xS int
+	var yS int
+	var brushSize int
 	for _, c := range g.Grid.Cells {
-		cColor := color.RGBA{0, 0, 0, 255}
 		if c.Alive {
 			cColor = color.RGBA{uint8(float64(g.GetNumberAliveNeighbors(*c)) / 8.0 * 255), 127, 0, 255}
+		} else {
+			cColor = color.RGBA{0, 0, 0, 255}
 		}
 
-		x := c.Position.X
-		y := c.Position.Y
+		x = c.Position.X
+		y = c.Position.Y
 
-		xS := x * cs
-		yS := y * cs
+		xS = x * cs
+		yS = y * cs
 
-		brushSize := int(g.BrushSize / 2.0 * cs)
+		brushSize = int(g.BrushSize / 2.0 * cs)
 
 		highlighted :=
 			int(m.X) >= xS-brushSize+1 &&

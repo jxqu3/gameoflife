@@ -66,14 +66,18 @@ func (g *Game) Draw() {
 	m := rl.GetScreenToWorld2D(rl.GetMousePosition(), g.Camera)
 
 	var cColor color.RGBA
+	camWorldPos := rl.GetScreenToWorld2D(rl.Vector2{X: float32(g.Width) + 2*cs, Y: float32(g.Height) + 2*cs}, g.Camera)
+	startWorldPos := rl.GetScreenToWorld2D(rl.Vector2{X: 250 - 2*cs*g.Camera.Zoom, Y: 0. - 2*cs*g.Camera.Zoom}, g.Camera)
+
 	var x int
 	var y int
 	var xS int
 	var yS int
-	var brushSize int
+	var visible bool
+	brushSize := int(g.BrushSize / 2.0 * cs)
 	for _, c := range g.Grid.Cells {
 		if c.Alive {
-			cColor = color.RGBA{uint8(float64(g.GetNumberAliveNeighbors(*c)) / 8.0 * 255), 127, 0, 255}
+			cColor = color.RGBA{uint8(float64(g.GetNumberAliveNeighbors(c)) / 8.0 * 255), 127, 0, 255}
 		} else {
 			cColor = color.RGBA{0, 0, 0, 255}
 		}
@@ -81,46 +85,50 @@ func (g *Game) Draw() {
 		x = c.Position.X
 		y = c.Position.Y
 
+		cellWorldPos := rl.Vector2{X: float32(xS), Y: float32(yS)}
+
+		visible = cellWorldPos.X < camWorldPos.X && cellWorldPos.Y < camWorldPos.Y && cellWorldPos.X > startWorldPos.X && cellWorldPos.Y > startWorldPos.Y
+
 		xS = x * cs
 		yS = y * cs
 
-		brushSize = int(g.BrushSize / 2.0 * cs)
-
-		highlighted :=
+		highlighted := visible &&
 			int(m.X) >= xS-brushSize+1 &&
-				int(m.X) <= xS+cs+brushSize &&
-				int(m.Y) >= yS-brushSize+1 &&
-				int(m.Y) <= yS+cs+brushSize
+			int(m.X) <= xS+cs+brushSize &&
+			int(m.Y) >= yS-brushSize+1 &&
+			int(m.Y) <= yS+cs+brushSize
 
-		if highlighted {
-			cColor = color.RGBA{255, 255, 255, 255}
-			if rl.IsMouseButtonDown(rl.MouseLeftButton) {
-				c.Alive = true
-			} else if rl.IsMouseButtonDown(rl.MouseRightButton) {
-				c.Alive = false
+		if visible {
+			if highlighted {
+				cColor = color.RGBA{255, 255, 255, 255}
+				if rl.IsMouseButtonDown(rl.MouseLeftButton) {
+					c.Alive = true
+				} else if rl.IsMouseButtonDown(rl.MouseRightButton) {
+					c.Alive = false
+				}
 			}
-		}
 
-		if g.ShowGrid {
-			rl.DrawRectangle(
-				int32(xS),
-				int32(yS),
-				int32(cs-1),
-				int32(cs-1),
-				cColor,
-			)
-			continue
-		}
+			if g.ShowGrid {
+				rl.DrawRectangle(
+					int32(xS),
+					int32(yS),
+					int32(cs-1),
+					int32(cs-1),
+					cColor,
+				)
+				continue
+			}
 
-		// If there's no grid, only render the alive cells (much better performance)
-		if c.Alive || highlighted {
-			rl.DrawRectangle(
-				int32(xS),
-				int32(yS),
-				int32(cs),
-				int32(cs),
-				cColor,
-			)
+			// If there's no grid, only render the alive cells (much better performance)
+			if c.Alive || highlighted {
+				rl.DrawRectangle(
+					int32(xS),
+					int32(yS),
+					int32(cs),
+					int32(cs),
+					cColor,
+				)
+			}
 		}
 	}
 }

@@ -17,6 +17,7 @@ type Game struct {
 	ShowGrid       bool
 	Speed_IPSecond int
 	Paused         bool
+	EnormousGrid   bool
 }
 
 func (g *Game) GetNeighbor(c *Cell, x int, y int) *Cell {
@@ -26,15 +27,12 @@ func (g *Game) GetNeighbor(c *Cell, x int, y int) *Cell {
 	return g.Grid.GetCell(cX+x, cY+y)
 }
 
-func (g *Game) GetNumberAliveNeighbors(c Cell) int {
+func (g *Game) GetNumberAliveNeighbors(c *Cell) int {
 	var neighbors int
-
-	y := c.Position.Y
-	x := c.Position.X
 
 	for i := -1; i <= 1; i++ {
 		for j := -1; j <= 1; j++ {
-			if (j != 0 || i != 0) && g.Grid.GetCell(x+i, y+j).Alive {
+			if (j != 0 || i != 0) && g.Grid.GetCell(c.Position.X+i, c.Position.Y+j).Alive {
 				neighbors++
 			}
 		}
@@ -43,51 +41,57 @@ func (g *Game) GetNumberAliveNeighbors(c Cell) int {
 }
 
 func (g *Game) Next(c Cell) bool {
-	n := g.GetNumberAliveNeighbors(c)
-
+	n := g.GetNumberAliveNeighbors(&c)
 	if n == 3 || (n == 2 && c.Alive) {
 		return true
 	}
 	return false
 }
 
-func (game *Game) DrawGUI() {
+func (g *Game) DrawGUI() {
 	bS := rg.Slider(
 		rl.NewRectangle(100, 100, 100, 20),
 		"Brush Size",
-		fmt.Sprint(game.BrushSize),
-		float32(game.BrushSize),
+		fmt.Sprint(g.BrushSize),
+		float32(g.BrushSize),
 		1, 20,
 	)
-	game.BrushSize = int(bS)
+	g.BrushSize = int(bS)
 	ips := rg.Slider(
 		rl.NewRectangle(100, 150, 100, 20),
 		"Iterations/Sec",
-		fmt.Sprint(game.Speed_IPSecond),
-		float32(game.Speed_IPSecond),
+		fmt.Sprint(g.Speed_IPSecond),
+		float32(g.Speed_IPSecond),
 		1, 1000,
 	)
-	game.Speed_IPSecond = int(ips)
+	g.Speed_IPSecond = int(ips)
 	zm := rg.Slider(
 		rl.NewRectangle(100, 200, 100, 20),
 		"Zoom",
-		fmt.Sprintf("%.1f", game.Camera.Zoom),
-		float32(game.Camera.Zoom),
+		fmt.Sprintf("%.1f", g.Camera.Zoom),
+		float32(g.Camera.Zoom),
 		0.1, 20,
 	)
-	game.Camera.Zoom = zm
+	g.Camera.Zoom = zm
+
+	g.EnormousGrid = rg.CheckBox(rl.NewRectangle(100, 300, 20, 20), "Enormous Grid (*10)", g.EnormousGrid)
+	maxGrid := 1200
+	if g.EnormousGrid {
+		maxGrid *= 10
+	}
+
 	gW := rg.Slider(
 		rl.NewRectangle(100, 250, 100, 20),
 		"Grid Size",
-		fmt.Sprint(game.Grid.Width),
-		float32(game.Grid.Width),
-		1, 1000,
+		fmt.Sprint(g.Grid.Width),
+		float32(g.Grid.Width),
+		1, float32(maxGrid),
 	)
 
-	if int(gW) != game.Grid.Width {
-		game.Paused = true
-		game.Grid.Width = int(gW)
-		game.Grid.Cells = InitGrid(game.Grid.Width).Cells
-		game.Update()
+	if int(gW) != g.Grid.Width {
+		g.Paused = true
+		g.Grid.Width = int(gW)
+		g.Grid.Cells = InitGrid(g.Grid.Width).Cells
+		g.Update()
 	}
 }

@@ -1,5 +1,5 @@
 commands:
-- name: bw
+- name: bw 
   description: builds the the game for windows
   command: growl cross -l -s -nc
 - name: bl

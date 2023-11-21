@@ -44,11 +44,9 @@ func (game *Game) HandleInput() {
 
 	if rl.IsKeyDown(rl.KeyLeftControl) {
 		game.Camera.Zoom += mW * 0.1
-		game.Camera.Zoom = ClampMin(game.Camera.Zoom, 0.2)
-
 	} else if rl.IsKeyDown(rl.KeyLeftShift) {
 		game.BrushSize += int(mW)
-		game.BrushSize = ClampMin(game.BrushSize, 1)
+		game.BrushSize = max(game.BrushSize, 1)
 	} else {
 		if game.Speed_IPSecond+int(mW) >= 1 {
 			game.Speed_IPSecond += int(mW)

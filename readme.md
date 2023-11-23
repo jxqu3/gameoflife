@@ -11,9 +11,10 @@ go install github.com/checkm4ted/gameoflife
 ```
 
 ## controls
+- Set Iterations Per Second with MouseWheel
 - Zoom with CTRL+MouseWheel
 - Set brush width with Shift+MouseWheel
-- Set Iterations Per Second with MouseWheel
+- Resize grid with the GUI or with Alt+MouseWheel
 - Move with middle click
 - Place cells with left click
 - Remove cells with right click

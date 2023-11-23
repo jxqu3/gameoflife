@@ -27,12 +27,12 @@ func (g *Game) GetNeighbor(c *Cell, x int, y int) *Cell {
 	return g.Grid.GetCell(cX+x, cY+y)
 }
 
-func (g *Game) GetNumberAliveNeighbors(c *Cell) int {
+func (g *Grid) GetNumberAliveNeighbors(c *Cell) int {
 	var neighbors int
 
 	for i := -1; i <= 1; i++ {
 		for j := -1; j <= 1; j++ {
-			if (j != 0 || i != 0) && g.Grid.GetCell(c.Position.X+i, c.Position.Y+j).Alive {
+			if (j != 0 || i != 0) && g.GetCell(c.Position.X+i, c.Position.Y+j).Alive {
 				neighbors++
 			}
 		}
@@ -40,13 +40,14 @@ func (g *Game) GetNumberAliveNeighbors(c *Cell) int {
 	return neighbors
 }
 
-func (g *Game) Next(c Cell) bool {
+func (g *Grid) Next(c Cell) bool {
 	n := g.GetNumberAliveNeighbors(&c)
-	if n == 3 || (n == 2 && c.Alive) {
-		return true
-	}
-	return false
+	return c.Alive && n == 2 || n == 3
 }
+
+const MaxGridSize = 2500
+
+var maxGrid = MaxGridSize
 
 func (g *Game) DrawGUI() {
 	bS := rg.Slider(
@@ -75,9 +76,8 @@ func (g *Game) DrawGUI() {
 	g.Camera.Zoom = zm
 
 	g.EnormousGrid = rg.CheckBox(rl.NewRectangle(100, 300, 20, 20), "Enormous Grid (*10)", g.EnormousGrid)
-	maxGrid := 1200
 	if g.EnormousGrid {
-		maxGrid *= 10
+		maxGrid = MaxGridSize * 10
 	}
 
 	gW := rg.Slider(
@@ -92,6 +92,6 @@ func (g *Game) DrawGUI() {
 		g.Paused = true
 		g.Grid.Width = int(gW)
 		g.Grid.Cells = InitGrid(g.Grid.Width).Cells
-		g.Update()
+		g.Grid.Update()
 	}
 }

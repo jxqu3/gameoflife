@@ -7,12 +7,12 @@ import (
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
-func (g *Game) Update() {
-	nextGrid := InitGrid(g.Grid.Width)
-	for _, c := range g.Grid.Cells {
+func (g *Grid) Update() {
+	nextGrid := InitGrid(g.Width)
+	for _, c := range g.Cells {
 		nextGrid.GetCell(c.Position.X, c.Position.Y).Alive = g.Next(*c)
 	}
-	g.Grid.Cells = nextGrid.Cells
+	g.Cells = nextGrid.Cells
 }
 
 func (game *Game) HandleInput() {
@@ -36,17 +36,26 @@ func (game *Game) HandleInput() {
 		game.ShowGrid = !game.ShowGrid
 	}
 
-	mW := rl.GetMouseWheelMove()
-
 	if rl.IsMouseButtonDown(rl.MouseMiddleButton) {
 		game.Camera.Target = rl.Vector2Subtract(game.Camera.Target, rl.Vector2Scale(rl.GetMouseDelta(), 1/game.Camera.Zoom))
 	}
 
+}
+
+func (game *Game) HandleControls() {
+	mW := rl.GetMouseWheelMove()
 	if rl.IsKeyDown(rl.KeyLeftControl) {
 		game.Camera.Zoom += mW * 0.1
 	} else if rl.IsKeyDown(rl.KeyLeftShift) {
 		game.BrushSize += int(mW)
 		game.BrushSize = max(game.BrushSize, 1)
+	} else if rl.IsKeyDown(rl.KeyLeftAlt) {
+		if int(mW) != game.Grid.Width {
+			game.Paused = true
+			game.Grid.Width = max(game.Grid.Width+int(mW*10), 10)
+			game.Grid.Cells = InitGrid(game.Grid.Width).Cells
+			game.Grid.Update()
+		}
 	} else {
 		if game.Speed_IPSecond+int(mW) >= 1 {
 			game.Speed_IPSecond += int(mW)
@@ -58,23 +67,23 @@ func (game *Game) HandleInput() {
 
 const cs = 10
 
-func (g *Game) Draw() {
+func (game *Game) Draw() {
 	rl.ClearBackground(color.RGBA{20, 20, 20, 255})
 
-	m := rl.GetScreenToWorld2D(rl.GetMousePosition(), g.Camera)
+	m := rl.GetScreenToWorld2D(rl.GetMousePosition(), game.Camera)
 
 	var cColor color.RGBA
-	camWorldPos := rl.GetScreenToWorld2D(rl.Vector2{X: float32(g.Width) + 2*cs, Y: float32(g.Height) + 2*cs}, g.Camera)
-	startWorldPos := rl.GetScreenToWorld2D(rl.Vector2{X: 250 - 2*cs*g.Camera.Zoom, Y: 0. - 2*cs*g.Camera.Zoom}, g.Camera)
+	camWorldPos := rl.GetScreenToWorld2D(rl.Vector2{X: float32(game.Width) + 2*cs, Y: float32(game.Height) + 2*cs}, game.Camera)
+	startWorldPos := rl.GetScreenToWorld2D(rl.Vector2{X: 250 - 2*cs*game.Camera.Zoom, Y: 0. - 2*cs*game.Camera.Zoom}, game.Camera)
 
 	var x int
 	var y int
 	var xS int
 	var yS int
 	var visible bool
-	brushSize := int(g.BrushSize / 2.0 * cs)
+	brushSize := int(game.BrushSize / 2.0 * cs)
 
-	for _, c := range g.Grid.Cells {
+	for _, c := range game.Grid.Cells {
 		x = c.Position.X
 		y = c.Position.Y
 		xS = x * cs
@@ -88,7 +97,7 @@ func (g *Game) Draw() {
 		}
 
 		if c.Alive {
-			cColor = color.RGBA{uint8(float64(g.GetNumberAliveNeighbors(c)) / 8.0 * 255), 127, 0, 255}
+			cColor = color.RGBA{uint8(float64(game.Grid.GetNumberAliveNeighbors(c)) / 8.0 * 255), 127, 0, 255}
 		} else {
 			cColor = color.RGBA{0, 0, 0, 255}
 		}
@@ -108,7 +117,7 @@ func (g *Game) Draw() {
 			}
 		}
 
-		if g.ShowGrid {
+		if game.ShowGrid {
 			rl.DrawRectangle(
 				int32(xS),
 				int32(yS),

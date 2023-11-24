@@ -8,3 +8,5 @@ commands:
 - name: git
   description: adds to git
   command: git add -A
+  extra:
+  - "git commit -m '%1'"

@@ -20,19 +20,12 @@ type Game struct {
 	EnormousGrid   bool
 }
 
-func (g *Game) GetNeighbor(c *Cell, x int, y int) *Cell {
-	cX := c.Position.X
-	cY := c.Position.Y
-
-	return g.Grid.GetCell(cX+x, cY+y)
-}
-
-func (g *Grid) GetNumberAliveNeighbors(c *Cell) int {
+func (g *Grid) GetNumberAliveNeighbors(c Cell) int {
 	var neighbors int
 
 	for i := -1; i <= 1; i++ {
 		for j := -1; j <= 1; j++ {
-			if (j != 0 || i != 0) && g.GetCell(c.Position.X+i, c.Position.Y+j).Alive {
+			if (j != 0 || i != 0) && g.GetCell(c.X+i, c.Y+j).Alive {
 				neighbors++
 			}
 		}
@@ -41,8 +34,8 @@ func (g *Grid) GetNumberAliveNeighbors(c *Cell) int {
 }
 
 func (g *Grid) Next(c Cell) bool {
-	n := g.GetNumberAliveNeighbors(&c)
-	return c.Alive && n == 2 || n == 3
+	n := g.GetNumberAliveNeighbors(c)
+	return (c.Alive && n == 2) || n == 3
 }
 
 const MaxGridSize = 2500

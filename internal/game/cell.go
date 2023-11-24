@@ -2,6 +2,9 @@ package game
 
 type Cell struct {
 	Alive       bool
-	Position    Vec2
 	JustChanged bool
+	X           int
+	XS          int
+	Y           int
+	YS          int
 }
